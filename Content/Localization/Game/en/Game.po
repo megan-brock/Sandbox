@@ -1,0 +1,64 @@
+﻿# Game English translation.
+# Fill out your copyright notice in the Description page of Project Settings.
+# 
+msgid ""
+msgstr ""
+"Project-Id-Version: Game\n"
+"POT-Creation-Date: 2026-10-03 19:06\n"
+"PO-Revision-Date: 2026-10-03 19:06\n"
+"Language-Team: \n"
+"Language: en\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+
+#. Key:	F63645D14A8775CEA9E09AA0D96A7DFD
+#. SourceLocation:	/Game/Sandbox/Dialogue/Data/TestDialogue.TestDialogue:DialogueRuntimeGraph_1.DialogueRuntimeNode_1.DialogueNodeInfo_0.DialogText
+#: /Game/Sandbox/Dialogue/Data/TestDialogue.TestDialogue:DialogueRuntimeGraph_1.DialogueRuntimeNode_1.DialogueNodeInfo_0.DialogText
+msgctxt ",F63645D14A8775CEA9E09AA0D96A7DFD"
+msgid "Test Dialogue"
+msgstr "Test Dialogue"
+
+#. Key:	315436A74919BC93C573A09400D33AB6
+#. SourceLocation:	/Game/Sandbox/Dialogue/Data/TestDialogue.TestDialogue:DialogueRuntimeGraph_1.DialogueRuntimeNode_1.DialogueNodeInfo_0.DialogueResponses(0).DialogueResponses
+#: /Game/Sandbox/Dialogue/Data/TestDialogue.TestDialogue:DialogueRuntimeGraph_1.DialogueRuntimeNode_1.DialogueNodeInfo_0.DialogueResponses(0).DialogueResponses
+msgctxt ",315436A74919BC93C573A09400D33AB6"
+msgid "Exit"
+msgstr "Exit"
+
+#. Key:	14A5C20244413C3EE41EA29F741B4C67
+#. SourceLocation:	/Game/Sandbox/Dialogue/Data/TestDialogue.TestDialogue:DialogueRuntimeGraph_1.DialogueRuntimeNode_1.DialogueNodeInfo_0.DialogueResponses(1).DialogueResponses
+#: /Game/Sandbox/Dialogue/Data/TestDialogue.TestDialogue:DialogueRuntimeGraph_1.DialogueRuntimeNode_1.DialogueNodeInfo_0.DialogueResponses(1).DialogueResponses
+msgctxt ",14A5C20244413C3EE41EA29F741B4C67"
+msgid "Test Response"
+msgstr "Test Response"
+
+#. Key:	63D92D904C02AA213412D4B2739B2A30
+#. SourceLocation:	/Game/Sandbox/Dialogue/Data/TestDialogue.TestDialogue:DialogueRuntimeGraph_1.DialogueRuntimeNode_1.DialogueNodeInfo_0.Title
+#: /Game/Sandbox/Dialogue/Data/TestDialogue.TestDialogue:DialogueRuntimeGraph_1.DialogueRuntimeNode_1.DialogueNodeInfo_0.Title
+msgctxt ",63D92D904C02AA213412D4B2739B2A30"
+msgid "Test"
+msgstr "Test"
+
+#. Key:	107619CF4A5F7FE508C431A3F950DB7C
+#. SourceLocation:	/Game/Sandbox/Dialogue/Data/TestDialogue.TestDialogue:DialogueRuntimeGraph_1.DialogueRuntimeNode_3.DialogueNodeInfo_0.DialogText
+#: /Game/Sandbox/Dialogue/Data/TestDialogue.TestDialogue:DialogueRuntimeGraph_1.DialogueRuntimeNode_3.DialogueNodeInfo_0.DialogText
+msgctxt ",107619CF4A5F7FE508C431A3F950DB7C"
+msgid "More Test Dialogue"
+msgstr "More Test Dialogue"
+
+#. Key:	9690E96D48A1BF95D904C4905719C2B8
+#. SourceLocation:	/Game/Sandbox/Dialogue/Data/TestDialogue.TestDialogue:DialogueRuntimeGraph_1.DialogueRuntimeNode_3.DialogueNodeInfo_0.DialogueResponses(0).DialogueResponses
+#: /Game/Sandbox/Dialogue/Data/TestDialogue.TestDialogue:DialogueRuntimeGraph_1.DialogueRuntimeNode_3.DialogueNodeInfo_0.DialogueResponses(0).DialogueResponses
+msgctxt ",9690E96D48A1BF95D904C4905719C2B8"
+msgid "Exit"
+msgstr "Exit"
+
+#. Key:	4258751E4585FB0B3E6E32B8CD0F5D83
+#. SourceLocation:	/Game/Sandbox/Dialogue/Data/TestDialogue.TestDialogue:DialogueRuntimeGraph_1.DialogueRuntimeNode_3.DialogueNodeInfo_0.Title
+#: /Game/Sandbox/Dialogue/Data/TestDialogue.TestDialogue:DialogueRuntimeGraph_1.DialogueRuntimeNode_3.DialogueNodeInfo_0.Title
+msgctxt ",4258751E4585FB0B3E6E32B8CD0F5D83"
+msgid "Test2"
+msgstr "Test2"
+
