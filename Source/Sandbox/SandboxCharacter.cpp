@@ -19,8 +19,6 @@ ASandboxCharacter::ASandboxCharacter()
 void ASandboxCharacter::BeginPlay()
 {
 	Super::BeginPlay();
-	
-	// CharacterControlComponent->HeadRotationTarget = FRotator(90.0f, 0.0f, 0.0f);
 }
 
 void ASandboxCharacter::NotifyControllerChanged()
@@ -79,8 +77,8 @@ void ASandboxCharacter::Move(const FInputActionValue& Value)
 		AddMovementInput(GetActorForwardVector(), MovementVector.Y);
 		AddMovementInput(GetActorRightVector(), MovementVector.X);
 		
-		auto headRotationTarget = CharacterControlComponent->HeadBoneRotation.Euler();
-		AddControllerYawInput( headRotationTarget.Z / 90);
+		auto headYaw = CharacterControlComponent->HeadBoneRotation.Yaw;
+		AddControllerYawInput( headYaw / 90);
 	}
 }
 
@@ -97,23 +95,12 @@ void ASandboxCharacter::Turn(const FInputActionValue& Value)
 void ASandboxCharacter::Look(const FInputActionValue& Value)
 {
 	FVector2D Value2D = Value.Get<FVector2D>();
-	
 	FRotator HeadRotation = CharacterControlComponent->HeadBoneRotation;
-
-	HeadRotation.Pitch = FMath::Clamp(HeadRotation.Pitch - Value2D.X, -90.0f, 90.0f);
-	HeadRotation.Yaw = FMath::Clamp(HeadRotation.Yaw + Value2D.Y, -60.0f, 60.0f);
-	HeadRotation.Roll = 0.0f;
+	HeadRotation.Pitch = 0.0f;
+	HeadRotation.Yaw = FMath::Clamp(HeadRotation.Yaw + Value2D.X, -90.0f, 90.0f);
+	HeadRotation.Roll = FMath::Clamp(HeadRotation.Roll + Value2D.Y, -90.0f, 70.0f);
 
 	CharacterControlComponent->HeadBoneRotation = HeadRotation;
-
-	UE_LOG(
-		LogTemplateCharacter,
-		Warning,
-		TEXT("HeadBoneRotationTarget: Pitch=%f, Yaw=%f, Roll=%f"),
-		HeadRotation.Pitch,
-		HeadRotation.Yaw,
-		HeadRotation.Roll
-	);
 }
 
 void ASandboxCharacter::StartControllingHand()
@@ -126,9 +113,6 @@ void ASandboxCharacter::StartControllingHand()
 	CharacterControlComponent->IsControllingHand = true;
 	
 	InputSubsystem->AddMappingContext(MovingHandMappingContext, 2);
-	
-	// CharacterControlComponent->HeadRotationTarget = FRotator::ZeroRotator;
-	// CharacterControlComponent->RightHandTarget = GetMesh()->GetSocketTransform(FName("hand_rSocket")); 
 }
 
 void ASandboxCharacter::StopControllingHand()
@@ -141,8 +125,7 @@ void ASandboxCharacter::StopControllingHand()
 	CharacterControlComponent->IsControllingHand = false;
 
 	InputSubsystem->RemoveMappingContext(MovingHandMappingContext);
-	
-	// CharacterControlComponent->RightHandTarget = FTransform::Identity;
+	CharacterControlComponent->HeadBoneRotation = FRotator::ZeroRotator;
 }
 
 void ASandboxCharacter::MoveHand(const FInputActionValue& Value)
@@ -156,6 +139,12 @@ void ASandboxCharacter::MoveHand(const FInputActionValue& Value)
 	
 	FTransform newRightHandTarget = CharacterControlComponent->RightHandTarget;
 	newRightHandTarget.AddToTranslation(GetActorForwardVector() * Value2D.Y + GetActorRightVector() * -Value2D.X);
+
+	FVector upperArmTransform = GetMesh()->GetBoneTransform(FName("upperarm_r")).GetLocation();
+	float yaw = (upperArmTransform - newRightHandTarget.GetLocation()).GetSafeNormal().Rotation().Yaw;
+	FRotator direction = FRotator(0.0f, yaw * 1.3f, 90.0f);
+	
+	newRightHandTarget.SetRotation(direction.Quaternion());
 	
 	CharacterControlComponent->RightHandTarget = newRightHandTarget;
 }
