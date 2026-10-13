@@ -43,7 +43,7 @@ public:
 	
 	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category = CharacterControl)
 	FTransform RightFootTarget;
-	
+
 private:	
 	bool IsSitting;
 };
