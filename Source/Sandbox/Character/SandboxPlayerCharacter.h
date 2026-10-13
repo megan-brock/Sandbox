@@ -1,30 +1,25 @@
-// Copyright Epic Games, Inc. All Rights Reserved.
+﻿#pragma once
 
-#pragma once
-
+#include "SandboxBaseCharacter.h"
 #include "CoreMinimal.h"
-#include "CharacterControlComponent.h"
-#include "GameFramework/Character.h"
 #include "Logging/LogMacros.h"
-#include "SandboxCharacter.generated.h"
+#include "SandboxPlayerCharacter.generated.h"
 
+struct FInputActionValue;
+class UInputAction;
+class UInputMappingContext;
 class UEnhancedInputLocalPlayerSubsystem;
 class UInputComponent;
 class USkeletalMeshComponent;
 class UCameraComponent;
-class UInputAction;
-class UInputMappingContext;
-struct FInputActionValue;
 
-DECLARE_LOG_CATEGORY_EXTERN(LogTemplateCharacter, Log, All);
-
-UCLASS(config=Game)
-class ASandboxCharacter : public ACharacter
+UCLASS()
+class ASandboxPlayerCharacter : public ASandboxBaseCharacter
 {
+public:
 	GENERATED_BODY()
-	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category=Input, meta=(AllowPrivateAccess="true"))
-	UCharacterControlComponent* CharacterControlComponent;
 	
+public:
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = Input, meta = (AllowPrivateAccess = "true"))
 	UInputMappingContext* DefaultMappingContext;
 
@@ -52,22 +47,21 @@ class ASandboxCharacter : public ACharacter
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = Input, meta = (AllowPrivateAccess = "true"))
 	UInputMappingContext* MovingHandMappingContext;
 	
-	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category=Input, meta=(AllowPrivateAccess = "true"))
-	UInputAction* MoveHandAction;
-
-protected:
-	ASandboxCharacter();
+public:
+	// AActor interface
+	void BeginPlay() override;
+	// End of AActor interface
 	
-	virtual void BeginPlay() override;
+	// APawn interface
+	virtual void NotifyControllerChanged() override;
+	virtual void SetupPlayerInputComponent(UInputComponent* InputComponent) override;
+	// End of APawn interface
 	
 	void Move(const FInputActionValue& Value);
-
 	void Turn(const FInputActionValue& Value);
-	
 	void Look(const FInputActionValue& Value);
 
 	void StartControllingHand();
-	
 	void StopControllingHand();
 	
 	void MoveHand(const FInputActionValue& Value);
@@ -77,13 +71,10 @@ protected:
 	
 	UFUNCTION(BlueprintCallable, Category = Input)
 	void ExitMealContext();
-	
-	// APawn interface
-	virtual void NotifyControllerChanged() override;
-	virtual void SetupPlayerInputComponent(UInputComponent* InputComponent) override;
-	// End of APawn interface
+
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category=Input, meta=(AllowPrivateAccess = "true"))
+	UInputAction* MoveHandAction;
 
 private:
 	UEnhancedInputLocalPlayerSubsystem* InputSubsystem;
 };
-

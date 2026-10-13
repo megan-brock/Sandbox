@@ -1,7 +1,6 @@
 // Copyright Epic Games, Inc. All Rights Reserved.
 
 #include "SandboxGameMode.h"
-#include "SandboxCharacter.h"
 #include "UObject/ConstructorHelpers.h"
 
 ASandboxGameMode::ASandboxGameMode()
