@@ -10,10 +10,10 @@ public:
 	GENERATED_BODY()
 	
 public:
-	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = BodyControl)
+	UPROPERTY()
 	FVector TargetLocation = FVector::ZeroVector;
 	
-	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = BodyControl)
+	UPROPERTY()
 	FRotator TargetRotation = FRotator::ZeroRotator;
 	
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = BodyControl)
