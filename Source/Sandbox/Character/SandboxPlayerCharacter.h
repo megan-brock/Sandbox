@@ -35,18 +35,6 @@ public:
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = Input, meta = (AllowPrivateAccess = "true"))
 	UInputAction* LookAction;
 	
-	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = Input, meta = (AllowPrivateAccess = "true"))
-	UInputMappingContext* MealMappingContext;
-	
-	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category=Input, meta=(AllowPrivateAccess = "true"))
-	UInputAction* ControlHandAction;
-	
-	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category=Input, meta=(AllowPrivateAccess = "true"))
-	UInputAction* ExitMealAction;
-	
-	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = Input, meta = (AllowPrivateAccess = "true"))
-	UInputMappingContext* MovingHandMappingContext;
-	
 public:
 	// AActor interface
 	void BeginPlay() override;
@@ -61,20 +49,6 @@ public:
 	void Turn(const FInputActionValue& Value);
 	void Look(const FInputActionValue& Value);
 
-	void StartControllingHand();
-	void StopControllingHand();
-	
-	void MoveHand(const FInputActionValue& Value);
-	
-	UFUNCTION(BlueprintCallable, Category = Input)
-	void EnterMealContext();
-	
-	UFUNCTION(BlueprintCallable, Category = Input)
-	void ExitMealContext();
-
-	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category=Input, meta=(AllowPrivateAccess = "true"))
-	UInputAction* MoveHandAction;
-
-private:
-	UEnhancedInputLocalPlayerSubsystem* InputSubsystem;
+	UFUNCTION(BlueprintCallable, Category = SandboxCharacter)
+	void MoveHand(const FVector2D& Value, const FVector& Offset);
 };

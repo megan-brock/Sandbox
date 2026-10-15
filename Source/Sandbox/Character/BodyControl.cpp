@@ -13,7 +13,10 @@ void UBodyControl::Tick(float DeltaTime)
 	}
 }
 
-void UBodyControl::MoveTowards(FVector NewCurrentLocation, FRotator NewCurrentRotation, FVector NewTargetLocation, FRotator NewTargetRotation)
+void UBodyControl::MoveTowards(
+	FVector NewCurrentLocation, FRotator NewCurrentRotation, 
+	FVector NewTargetLocation, FRotator NewTargetRotation,
+	FBodyControlTargetReachedCallback OnTargetReached)
 {
 	Data.CurrentLocation = NewCurrentLocation;
 	Data.CurrentRotation = NewCurrentRotation;
@@ -22,6 +25,16 @@ void UBodyControl::MoveTowards(FVector NewCurrentLocation, FRotator NewCurrentRo
 	Data.TargetRotation = NewTargetRotation;
 	
 	Data.IsControlled = true;
+	
+	TargetReachedCallback = OnTargetReached;
+	bHasReachedTarget = false;
+
+	CheckTargetReached();
+}
+
+void UBodyControl::SetIsControlled(bool IsControlled)
+{
+	Data.IsControlled = IsControlled;
 }
 
 void UBodyControl::SnapTo(FVector NewLocation, FRotator NewRotation)
@@ -35,6 +48,34 @@ void UBodyControl::RotateTowards(FRotator NewTargetRotation)
 {
 	Data.CurrentRotation = Data.TargetRotation = NewTargetRotation;
 	Data.IsControlled = true;
-	
-	UE_LOG(LogTemp, Warning, TEXT("RotateTowards %s"), *Data.CurrentRotation.ToString());
+}
+
+bool UBodyControl::HasReachedTarget() const
+{
+	const bool bLocationReached = FVector::DistSquared(Data.CurrentLocation, Data.TargetLocation)
+		<= FMath::Square(LocationReachedTolerance);
+
+	const bool bRotationReached = Data.CurrentRotation.Equals(Data.TargetRotation, RotationReachedTolerance);
+
+	return bLocationReached && bRotationReached;
+}
+
+void UBodyControl::CheckTargetReached()
+{
+	if (!Data.IsControlled || bHasReachedTarget)
+	{
+		return;
+	}
+
+	if (!HasReachedTarget())
+	{
+		return;
+	}
+
+	bHasReachedTarget = true;
+
+	if (TargetReachedCallback.IsBound())
+	{
+		TargetReachedCallback.Execute(this);
+	}
 }

@@ -9,29 +9,10 @@
 void ASandboxPlayerCharacter::NotifyControllerChanged()
 {
 	Super::NotifyControllerChanged();
-
-	// Add Input Mapping Context
-	if (APlayerController* PlayerController = Cast<APlayerController>(Controller))
-	{
-		if (UEnhancedInputLocalPlayerSubsystem* Subsystem = ULocalPlayer::GetSubsystem<UEnhancedInputLocalPlayerSubsystem>(PlayerController->GetLocalPlayer()))
-		{
-			InputSubsystem = Subsystem;
-		}
-	}
-	
-	InputSubsystem->AddMappingContext(DefaultMappingContext, 0);
 }
 
 void ASandboxPlayerCharacter::SetupPlayerInputComponent(UInputComponent* PlayerInputComponent)
 {	
-	if (APlayerController* PlayerController = Cast<APlayerController>(Controller))
-	{
-		if (UEnhancedInputLocalPlayerSubsystem* Subsystem = ULocalPlayer::GetSubsystem<UEnhancedInputLocalPlayerSubsystem>(PlayerController->GetLocalPlayer()))
-		{
-			InputSubsystem = Subsystem;
-		}
-	}
-	
 	// Set up action bindings
 	if (UEnhancedInputComponent* EnhancedInputComponent = Cast<UEnhancedInputComponent>(PlayerInputComponent))
 	{
@@ -40,10 +21,6 @@ void ASandboxPlayerCharacter::SetupPlayerInputComponent(UInputComponent* PlayerI
 		EnhancedInputComponent->BindAction(MoveAction, ETriggerEvent::Triggered, this, &ASandboxPlayerCharacter::Move);
 		EnhancedInputComponent->BindAction(TurnAction, ETriggerEvent::Triggered, this, &ASandboxPlayerCharacter::Turn);
 		EnhancedInputComponent->BindAction(LookAction, ETriggerEvent::Triggered, this, &ASandboxPlayerCharacter::Look);
-		
-		EnhancedInputComponent->BindAction(ControlHandAction, ETriggerEvent::Started, this, &ASandboxPlayerCharacter::StartControllingHand);
-		EnhancedInputComponent->BindAction(ControlHandAction, ETriggerEvent::Completed, this, &ASandboxPlayerCharacter::StopControllingHand);
-		EnhancedInputComponent->BindAction(MoveHandAction, ETriggerEvent::Triggered, this, &ASandboxPlayerCharacter::MoveHand);
 	}
 	else
 	{
@@ -62,6 +39,8 @@ void ASandboxPlayerCharacter::Move(const FInputActionValue& Value)
 	// input is a Vector2D
 	FVector2D MovementVector = Value.Get<FVector2D>();
 
+	UE_LOG(LogTemplateCharacter, Warning, TEXT("MovementVector: %s"), *MovementVector.ToString());
+	
 	if (Controller && CharacterControlComponent)
 	{
 		// add movement 
@@ -92,47 +71,11 @@ void ASandboxPlayerCharacter::Look(const FInputActionValue& Value)
 	HeadRotation.Yaw = FMath::Clamp(HeadRotation.Yaw + Value2D.X, -90.0f, 90.0f);
 	HeadRotation.Roll = FMath::Clamp(HeadRotation.Roll + Value2D.Y, -90.0f, 70.0f);
 	
-	UE_LOG(LogTemplateCharacter, Warning, TEXT("Head Rotation: %s"), *HeadRotation.ToString());
-	
 	CharacterControlComponent->TurnHead(HeadRotation);
 }
 
-void ASandboxPlayerCharacter::StartControllingHand()
+void ASandboxPlayerCharacter::MoveHand(const FVector2D& Value, const FVector& Offset)
 {
-	if (!InputSubsystem)
-	{
-		return;
-	}
-	
-	FTransform newRightHandTarget = GetMesh()->GetBoneTransform(FName("hand_r"));
-	CharacterControlComponent->MoveRightHandToLocation(newRightHandTarget);
-	
-	InputSubsystem->AddMappingContext(MovingHandMappingContext, 2);
-}
-
-void ASandboxPlayerCharacter::StopControllingHand()
-{
-	if (!InputSubsystem)
-	{
-		return;
-	}
-	
-	CharacterControlComponent->RightHandControl->Data.IsControlled = false;
-
-	InputSubsystem->RemoveMappingContext(MovingHandMappingContext);
-
-	CharacterControlComponent->TurnHead(FRotator::ZeroRotator);
-}
-
-void ASandboxPlayerCharacter::MoveHand(const FInputActionValue& Value)
-{
-	if (!CharacterControlComponent->RightHandControl->Data.IsControlled)
-	{
-		return;
-	}
-	
-	FVector2D Value2D = Value.Get<FVector2D>();
-
 	FTransform rightHandTransform = GetMesh()->GetBoneTransform(FName("hand_r"));
 	FTransform rightShoulderTransform = GetMesh()->GetBoneTransform(FName("upperarm_r"));
 	
@@ -141,32 +84,18 @@ void ASandboxPlayerCharacter::MoveHand(const FInputActionValue& Value)
 	newRightHandRotation.Roll = 90.0f;
 	newRightHandRotation.Yaw *= 1.3f;
 	
-	FVector newRightHandLocation = CharacterControlComponent->RightHandControl->Data.CurrentLocation + GetActorForwardVector() * Value2D.Y + GetActorRightVector() * -Value2D.X;
+	FVector newRightHandLocation = 
+		CharacterControlComponent->RightHandControl->Data.CurrentLocation + 
+			GetActorForwardVector() * Value.Y + 
+				GetActorRightVector() * -Value.X;
+	
+	if (Offset != FVector::ZeroVector)
+	{
+		newRightHandLocation.Z = Offset.Z + 5.0f;
+	}
+	
+	UE_LOG(LogTemplateCharacter, Warning, TEXT("newRightHandLocation: %s"), *newRightHandLocation.ToString());
 	
 	CharacterControlComponent->RightHandControl->SnapTo(newRightHandLocation, newRightHandRotation);
 	CharacterControlComponent->WatchRightHand();
-}
-
-void ASandboxPlayerCharacter::EnterMealContext()
-{
-	if (!InputSubsystem)
-	{
-		return;
-	}
-	
-	InputSubsystem->RemoveMappingContext(DefaultMappingContext);
-	InputSubsystem->AddMappingContext(MealMappingContext, 1);
-}
-
-void ASandboxPlayerCharacter::ExitMealContext()
-{
-	if (!InputSubsystem)
-	{
-		return;
-	}
-	
-	InputSubsystem->AddMappingContext(DefaultMappingContext, 0);
-	InputSubsystem->RemoveMappingContext(MealMappingContext);
-	
-	StopControllingHand();
 }

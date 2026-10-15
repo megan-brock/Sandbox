@@ -34,15 +34,18 @@ public:
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Instanced, Category = CharacterControl)
 	TObjectPtr<UBodyControl> RightFootControl;
 	
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = CharacterControl)
+	bool IsSitting;
+	
 public:
 	UFUNCTION(BlueprintCallable, Category = CharacterControl)
-	void MoveLeftHandToLocation(FTransform TargetPosition);
+	void MoveLeftHandTowards(FTransform TargetPosition, FBodyControlTargetReachedCallback OnTargetReached);
 	
 	UFUNCTION(BlueprintCallable, Category = CharacterControl)
-	void MoveRightHandToLocation(FTransform TargetPosition);
+	void MoveRightHandTowards(FTransform TargetPosition, FBodyControlTargetReachedCallback OnTargetReached);
 
 	UFUNCTION(BlueprintCallable, Category = CharacterControl)
-	void Sit(FTransform PelvisTargetTransform, FTransform LeftFootTargetTransform, FTransform RightFootTargetTransform);
+	void Sit();
 	
 	UFUNCTION(BlueprintCallable, Category = CharacterControl)
 	void Stand();

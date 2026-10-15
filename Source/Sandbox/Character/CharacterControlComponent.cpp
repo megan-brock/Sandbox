@@ -37,35 +37,33 @@ void UCharacterControlComponent::TickComponent(float DeltaTime, ELevelTick TickT
 }
 
 
-void UCharacterControlComponent::MoveLeftHandToLocation(FTransform TargetTransform)
+void UCharacterControlComponent::MoveLeftHandTowards(FTransform TargetTransform, FBodyControlTargetReachedCallback OnTargetReached)
 {
 	FTransform currentTransform = Mesh->GetBoneTransform(FName("hand_l"));
-	LeftHandControl->MoveTowards(currentTransform.GetLocation(), currentTransform.Rotator(), TargetTransform.GetLocation(), TargetTransform.GetRotation().Rotator());
+	LeftHandControl->MoveTowards(
+		currentTransform.GetLocation(), currentTransform.Rotator(), 
+		TargetTransform.GetLocation(), TargetTransform.GetRotation().Rotator(), 
+		OnTargetReached);
 }
 
-void UCharacterControlComponent::MoveRightHandToLocation(FTransform TargetTransform)
+void UCharacterControlComponent::MoveRightHandTowards(FTransform TargetTransform, FBodyControlTargetReachedCallback OnTargetReached)
 {
 	FTransform currentTransform = Mesh->GetBoneTransform(FName("hand_r"));
-	RightHandControl->MoveTowards(currentTransform.GetLocation(), currentTransform.Rotator(),TargetTransform.GetLocation(), TargetTransform.GetRotation().Rotator());
+	RightHandControl->MoveTowards(
+		currentTransform.GetLocation(), currentTransform.Rotator(),
+		TargetTransform.GetLocation(), TargetTransform.GetRotation().Rotator(),
+		OnTargetReached);
 }
 
-void UCharacterControlComponent::Sit(FTransform PelvisTargetTransform, FTransform LeftFootTargetTransform,
-	FTransform RightFootTargetTransform)
+void UCharacterControlComponent::Sit()
 {
-	FTransform currentPelvisTransform = Mesh->GetBoneTransform(FName("pelvis"));
-	FTransform currentLeftFootTransform = Mesh->GetBoneTransform(FName("foot_l"));
-	FTransform currentRightFootTransform = Mesh->GetBoneTransform(FName("foot_r"));
-	
-	PelvisControl->MoveTowards(currentPelvisTransform.GetLocation(), currentPelvisTransform.Rotator(),PelvisTargetTransform.GetLocation(), PelvisTargetTransform.GetRotation().Rotator());
-	LeftFootControl->MoveTowards(currentLeftFootTransform.GetLocation(), currentLeftFootTransform.Rotator(), LeftFootTargetTransform.GetLocation(), LeftFootTargetTransform.GetRotation().Rotator());
-	RightFootControl->MoveTowards(currentRightFootTransform.GetLocation(), currentRightFootTransform.Rotator(), RightFootTargetTransform.GetLocation(), RightFootTargetTransform.GetRotation().Rotator());
+	IsSitting = true;
 }
 
 void UCharacterControlComponent::Stand()
 {
-	PelvisControl->Data.IsControlled = false;
-	LeftFootControl->Data.IsControlled = false;
-	RightFootControl->Data.IsControlled = false;
+	IsSitting = false;
+	
 	LeftHandControl->Data.IsControlled = false;
 	RightHandControl->Data.IsControlled = false;
 }
