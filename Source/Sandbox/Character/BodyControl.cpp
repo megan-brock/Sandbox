@@ -8,8 +8,10 @@ void UBodyControl::Tick(float DeltaTime)
 {
 	if (Data.IsControlled)
 	{
-		Data.CurrentLocation = FMath::Lerp(Data.CurrentLocation, Data.TargetLocation, DeltaTime * 100.0f);
-		Data.CurrentRotation = FMath::Lerp(Data.CurrentRotation, Data.TargetRotation, DeltaTime * 100.0f);
+		Data.CurrentLocation = FMath::Lerp(Data.CurrentLocation, Data.TargetLocation, DeltaTime * 3.0f);
+		Data.CurrentRotation = FMath::Lerp(Data.CurrentRotation, Data.TargetRotation, DeltaTime * 3.0f);
+		
+		CheckTargetReached();
 	}
 }
 
@@ -28,8 +30,6 @@ void UBodyControl::MoveTowards(
 	
 	TargetReachedCallback = OnTargetReached;
 	bHasReachedTarget = false;
-
-	CheckTargetReached();
 }
 
 void UBodyControl::SetIsControlled(bool IsControlled)
@@ -77,5 +77,6 @@ void UBodyControl::CheckTargetReached()
 	if (TargetReachedCallback.IsBound())
 	{
 		TargetReachedCallback.Execute(this);
+		UE_LOG(LogTemp, Warning, TEXT("Target reached"));
 	}
 }
