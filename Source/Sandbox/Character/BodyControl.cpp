@@ -8,8 +8,8 @@ void UBodyControl::Tick(float DeltaTime)
 {
 	if (Data.IsControlled)
 	{
-		Data.CurrentLocation = FMath::Lerp(Data.CurrentLocation, Data.TargetLocation, DeltaTime * 10.0f);
-		Data.CurrentRotation = FMath::Lerp(Data.CurrentRotation, Data.TargetRotation, DeltaTime * 10.0f);
+		Data.CurrentLocation = FMath::Lerp(Data.CurrentLocation, Data.TargetLocation, DeltaTime * 100.0f);
+		Data.CurrentRotation = FMath::Lerp(Data.CurrentRotation, Data.TargetRotation, DeltaTime * 100.0f);
 	}
 }
 
