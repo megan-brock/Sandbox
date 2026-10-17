@@ -75,19 +75,19 @@ void ASandboxPlayerCharacter::Look(const FInputActionValue& Value)
 }
 
 void ASandboxPlayerCharacter::MoveHand(const FVector2D& Value, const FVector& Offset)
-{
-	FTransform rightHandTransform = GetMesh()->GetBoneTransform(FName("hand_r"));
-	FTransform rightShoulderTransform = GetMesh()->GetBoneTransform(FName("upperarm_r"));
-	
-	FRotator newRightHandRotation = (rightShoulderTransform.GetLocation() - rightHandTransform.GetLocation()).Rotation();
-	newRightHandRotation.Pitch = 0.0f;
-	newRightHandRotation.Roll = 90.0f;
-	newRightHandRotation.Yaw *= 1.3f;
-	
+{	
 	FVector newRightHandLocation = 
 		CharacterControlComponent->RightHandControl->Data.CurrentLocation + 
 			GetActorForwardVector() * Value.Y + 
 				GetActorRightVector() * -Value.X;
+
+	FTransform rightHandTransform = GetMesh()->GetBoneTransform(FName("hand_r"), RTS_Actor);
+	FTransform rightShoulderTransform = GetMesh()->GetBoneTransform(FName("upperarm_r"), RTS_Actor);
+	
+	FRotator newRightHandRotation = (rightShoulderTransform.GetLocation() - rightHandTransform.GetLocation()).Rotation();
+	newRightHandRotation = GetActorTransform().TransformRotation(newRightHandRotation.Quaternion()).Rotator();
+	newRightHandRotation.Pitch = 0.0f;
+	newRightHandRotation.Roll = 90.0f;
 	
 	if (Offset != FVector::ZeroVector)
 	{
