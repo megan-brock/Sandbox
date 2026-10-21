@@ -92,9 +92,8 @@ void ASandboxPlayerCharacter::MoveHand(const FVector2D& Value, const FVector& Of
 	if (Offset != FVector::ZeroVector)
 	{
 		newRightHandLocation.Z = Offset.Z + 5.0f;
+		UE_LOG(LogTemplateCharacter, Warning, TEXT("newRightHandLocation: %s"), *newRightHandLocation.ToString());
 	}
-	
-	UE_LOG(LogTemplateCharacter, Warning, TEXT("newRightHandLocation: %s"), *newRightHandLocation.ToString());
 	
 	CharacterControlComponent->RightHandControl->SnapTo(newRightHandLocation, newRightHandRotation);
 	CharacterControlComponent->WatchRightHand();
