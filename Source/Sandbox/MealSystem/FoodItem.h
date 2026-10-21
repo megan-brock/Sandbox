@@ -44,7 +44,13 @@ public:
 	
 	UPROPERTY( BlueprintAssignable, Category = FoodItem)
 	FOnBite OnBite;
+
+	UPROPERTY(BlueprintReadOnly, Category = FoodItem)
+	FTransform OriginalTransform;
 	
+	UPROPERTY(BlueprintReadWrite, Category = FoodItem)
+	FTransform OriginalInteractTransform;
+
 protected:
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = FoodItem)
 	int BitesRemaining = 1;
@@ -57,6 +63,4 @@ protected:
 	
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = FoodItem)
 	bool Interactable = true;
-	
-	FTransform OriginalTransform;
 };
