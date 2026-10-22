@@ -20,6 +20,7 @@ bool AFoodItem::RemovePortion()
 		if (NeedsCollectionAfterFinishing)
 		{
 			ReadyForCollection = true;
+			Interactable = false;
 		}
 		else
 		{
