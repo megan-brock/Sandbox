@@ -22,7 +22,7 @@ public:
 	virtual FName GetToolkitFName() const override { return FName(TEXT("DialogueAssetEditorApp"));}
 	virtual FText GetBaseToolkitName() const override { return FText::FromString(TEXT("DialogueAssetEditorApp")); }
 	virtual FString GetWorldCentricTabPrefix() const override { return TEXT("DialogueAssetEditorApp"); }
-	virtual FLinearColor GetWorldCentricTabColorScale() const override { return FLinearColor(0.3, 0.2, 0.5, 0.5); }
+	virtual FLinearColor GetWorldCentricTabColorScale() const override { return FLinearColor(0.3f, 0.2f, 0.5f, 0.5f); }
 	virtual FString GetDocumentationLink() const override { return TEXT("https://github.com/megan-brock"); }
 	virtual void OnToolkitHostingStarted(const TSharedRef<IToolkit>& Toolkit) override {}
 	virtual void OnToolkitHostingFinished(const TSharedRef<IToolkit>& Toolkit) override {}
