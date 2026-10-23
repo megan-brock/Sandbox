@@ -1,7 +1,7 @@
 ﻿#pragma once
 
 UENUM( BlueprintType )
-enum ESandboxCharacterState
+enum ESandboxCharacterState : uint8
 {
 	None,
 	Default,

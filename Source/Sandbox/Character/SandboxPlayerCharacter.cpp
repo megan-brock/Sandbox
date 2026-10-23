@@ -16,8 +16,6 @@ void ASandboxPlayerCharacter::SetupPlayerInputComponent(UInputComponent* PlayerI
 	// Set up action bindings
 	if (UEnhancedInputComponent* EnhancedInputComponent = Cast<UEnhancedInputComponent>(PlayerInputComponent))
 	{
-		EnhancedInputComponent->BindAction(JumpAction, ETriggerEvent::Started, this, &ACharacter::Jump);
-		EnhancedInputComponent->BindAction(JumpAction, ETriggerEvent::Completed, this, &ACharacter::StopJumping);
 		EnhancedInputComponent->BindAction(MoveAction, ETriggerEvent::Triggered, this, &ASandboxPlayerCharacter::Move);
 		EnhancedInputComponent->BindAction(TurnAction, ETriggerEvent::Triggered, this, &ASandboxPlayerCharacter::Turn);
 		EnhancedInputComponent->BindAction(LookAction, ETriggerEvent::Triggered, this, &ASandboxPlayerCharacter::Look);
@@ -92,9 +90,8 @@ void ASandboxPlayerCharacter::MoveHand(const FVector2D& Value, const FVector& Of
 	if (Offset != FVector::ZeroVector)
 	{
 		newRightHandLocation.Z = Offset.Z + 5.0f;
+		UE_LOG(LogTemplateCharacter, Warning, TEXT("newRightHandLocation: %s"), *newRightHandLocation.ToString());
 	}
-	
-	UE_LOG(LogTemplateCharacter, Warning, TEXT("newRightHandLocation: %s"), *newRightHandLocation.ToString());
 	
 	CharacterControlComponent->RightHandControl->SnapTo(newRightHandLocation, newRightHandRotation);
 	CharacterControlComponent->WatchRightHand();
