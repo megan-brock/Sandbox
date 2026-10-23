@@ -36,8 +36,10 @@ DialogueAssetAppMode::DialogueAssetAppMode(TSharedPtr<class DialogueAssetEditorA
 void DialogueAssetAppMode::RegisterTabFactories(TSharedPtr<FTabManager> InTabManager)
 {
 	TSharedPtr<DialogueAssetEditorApp> app = App.Pin();
-	app->PushTabFactories(AllowedTabs);
-	FApplicationMode::RegisterTabFactories(InTabManager);
+	if (app.IsValid())
+	{
+		app->PushTabFactories(AllowedTabs);
+	}
 }
 
 void DialogueAssetAppMode::PreDeactivateMode()
