@@ -17,6 +17,11 @@
 	"Modules": [
 		{
 			"Name": "DialogueAssetEditor",
+			"Type": "Editor",
+			"LoadingPhase": "Default"
+		},
+		{
+			"Name": "DialogueAssetEditorRuntime",
 			"Type": "Runtime",
 			"LoadingPhase": "Default"
 		}
