@@ -3,6 +3,7 @@
 #include "CoreMinimal.h"
 #include "FoodType.h"
 #include "GameFramework/Actor.h"
+#include "Sandbox/Interaction/InteractableItemComponent.h"
 #include "FoodItem.generated.h"
 
 class UMealParticipantComponent;
@@ -19,8 +20,12 @@ public:
 public:
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = FoodItem)
 	EFoodType FoodType;
-	
+
 public:
+	AFoodItem();
+	
+	virtual void BeginPlay() override;
+	
 	UFUNCTION(BlueprintCallable, Category = FoodItem)
 	void PlaceOnTable(FTransform TargetTransform);
 	
@@ -32,10 +37,7 @@ public:
 	
 	UFUNCTION(BlueprintCallable, Category = FoodItem)
 	virtual void TakeBite(UMealParticipantComponent* MealParticipant);
-	
-	UFUNCTION(BlueprintCallable, Category = FoodItem)
-	void ResetPosition();
-	
+
 	UFUNCTION(BlueprintCallable, Category = FoodItem)
 	bool TryCollect();
 	
@@ -52,6 +54,9 @@ public:
 	FTransform OriginalInteractTransform;
 
 protected:
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category="Interaction")
+	UInteractableItemComponent* InteractableItemComponent;
+	
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = FoodItem)
 	int BitesRemaining = 1;
 	

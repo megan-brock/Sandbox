@@ -29,7 +29,6 @@ void ASandboxPlayerCharacter::SetupPlayerInputComponent(UInputComponent* PlayerI
 void ASandboxPlayerCharacter::BeginPlay()
 {
 	Super::BeginPlay();
-	CharacterControlComponent->TurnHead(FRotator::ZeroRotator);
 }
 
 void ASandboxPlayerCharacter::Move(const FInputActionValue& Value)
@@ -45,8 +44,7 @@ void ASandboxPlayerCharacter::Move(const FInputActionValue& Value)
 		AddMovementInput(GetActorForwardVector(), MovementVector.Y);
 		AddMovementInput(GetActorRightVector(), MovementVector.X);
 		
-		auto headYaw = CharacterControlComponent->HeadControl->Data.CurrentRotation.Yaw;
-		AddControllerYawInput( headYaw / 90);
+		AddControllerYawInput(CharacterControlComponent->HeadRotationTarget.Yaw / 90.0f);
 	}
 }
 
@@ -64,35 +62,10 @@ void ASandboxPlayerCharacter::Look(const FInputActionValue& Value)
 {
 	FVector2D Value2D = Value.Get<FVector2D>();
 	
-	FRotator HeadRotation = CharacterControlComponent->HeadControl->Data.CurrentRotation;
+	FRotator HeadRotation = CharacterControlComponent->HeadRotationTarget;
+	HeadRotation.Roll = FMath::Clamp(HeadRotation.Roll + Value2D.Y, -90.0f, 90.0f);
 	HeadRotation.Pitch = 0.0f;
-	HeadRotation.Yaw = FMath::Clamp(HeadRotation.Yaw + Value2D.X, -90.0f, 90.0f);
-	HeadRotation.Roll = FMath::Clamp(HeadRotation.Roll + Value2D.Y, -90.0f, 70.0f);
+	HeadRotation.Yaw = FMath::Clamp(HeadRotation.Yaw + Value2D.X, -90.0f, 70.0f);
 	
-	CharacterControlComponent->TurnHead(HeadRotation);
-}
-
-void ASandboxPlayerCharacter::MoveHand(const FVector2D& Value, const FVector& Offset)
-{	
-	FVector newRightHandLocation = 
-		CharacterControlComponent->RightHandControl->Data.CurrentLocation + 
-			GetActorForwardVector() * Value.Y + 
-				GetActorRightVector() * -Value.X;
-
-	FTransform rightHandTransform = GetMesh()->GetBoneTransform(FName("hand_r"), RTS_Actor);
-	FTransform rightShoulderTransform = GetMesh()->GetBoneTransform(FName("upperarm_r"), RTS_Actor);
-	
-	FRotator newRightHandRotation = (rightShoulderTransform.GetLocation() - rightHandTransform.GetLocation()).Rotation();
-	newRightHandRotation = GetActorTransform().TransformRotation(newRightHandRotation.Quaternion()).Rotator();
-	newRightHandRotation.Pitch = 0.0f;
-	newRightHandRotation.Roll = 90.0f;
-	
-	if (Offset != FVector::ZeroVector)
-	{
-		newRightHandLocation.Z = Offset.Z + 5.0f;
-		UE_LOG(LogTemplateCharacter, Warning, TEXT("newRightHandLocation: %s"), *newRightHandLocation.ToString());
-	}
-	
-	CharacterControlComponent->RightHandControl->SnapTo(newRightHandLocation, newRightHandRotation);
-	CharacterControlComponent->WatchRightHand();
+	CharacterControlComponent->HeadRotationTarget = HeadRotation;
 }

@@ -5,7 +5,10 @@
 #include "UObject/Object.h"
 #include "BodyControl.generated.h"
 
+class UBodyControl;
+
 DECLARE_DYNAMIC_DELEGATE_OneParam(FBodyControlTargetReachedCallback, UBodyControl*, BodyControl);
+DECLARE_DYNAMIC_DELEGATE_OneParam(FBodyControlTargetCancelledCallback, UBodyControl*, BodyControl);
 
 UCLASS(BlueprintType, Blueprintable, EditInlineNew, DefaultToInstanced)
 class UBodyControl : public UObject
@@ -14,31 +17,34 @@ public:
 	GENERATED_BODY()
 	
 public:
-	UBodyControl();
-	
 	void Tick(float DeltaTime);
 	
 public:
 	UFUNCTION(BlueprintCallable, Category = BodyControl)
 	void MoveTowards(
-		FVector NewCurrentLocation, FRotator NewCurrentRotation, 
 		FVector NewTargetLocation, FRotator NewTargetRotation,
-		FBodyControlTargetReachedCallback OnTargetReached);
+		FBodyControlTargetReachedCallback OnTargetReached, FBodyControlTargetCancelledCallback OnTargetCancelled);
+	
+	UFUNCTION(BlueprintCallable, Category = BodyControl)
+	void MoveToRest(FBodyControlTargetReachedCallback OnTargetReached, FBodyControlTargetCancelledCallback OnTargetCancelled);
+	
+	UFUNCTION(BlueprintCallable, BlueprintPure, Category = BodyControl)
+	bool GetIsControlled();
 	
 	UFUNCTION(BlueprintCallable, Category = BodyControl)
 	void SetIsControlled(bool IsControlled);
 	
 	UFUNCTION(BlueprintCallable, Category = BodyControl)
-	void SnapTo(FVector NewLocation, FRotator NewRotation);
+	void SetShouldWatch(bool ShouldWatch);
 	
 	UFUNCTION(BlueprintCallable, Category = BodyControl)
-	void RotateTowards(FRotator NewTargetRotation);
+	void SnapTo(FVector NewLocation, FRotator NewRotation);
 	
 	UFUNCTION(BlueprintCallable, BlueprintPure, Category = BodyControl)
 	bool HasReachedTarget() const;
 
 	UFUNCTION(BlueprintCallable, Category = BodyControl)
-	void CheckTargetReached();
+	void SetRestLocationAndRotation(FVector Location, FRotator Rotation, bool SnapToTarget);
 	
 public:
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = BodyControl)
@@ -47,12 +53,17 @@ public:
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = BodyControl)
 	float LocationReachedTolerance = 1.0f;
 
-	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = BodyControl)
-	float RotationReachedTolerance = 1.0f;
+	UPROPERTY()
+	TObjectPtr<USkeletalMeshComponent> Mesh;
 	
 private:
 	UPROPERTY()
 	FBodyControlTargetReachedCallback TargetReachedCallback;
 	
+	UPROPERTY()
+	FBodyControlTargetCancelledCallback TargetCancelledCallback;
+	
 	bool bHasReachedTarget = false;
+	
+	void CheckTargetReached();
 };

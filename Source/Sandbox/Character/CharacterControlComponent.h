@@ -17,44 +17,23 @@ public:
 
 public:
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Instanced, Category = CharacterControl)
-	TObjectPtr<UBodyControl> HeadControl;
-	
-	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Instanced, Category = CharacterControl)
 	TObjectPtr<UBodyControl> LeftHandControl;
 	
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Instanced, Category = CharacterControl)
 	TObjectPtr<UBodyControl> RightHandControl;
 	
-	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Instanced, Category = CharacterControl)
-	TObjectPtr<UBodyControl> PelvisControl;
-	
-	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Instanced, Category = CharacterControl)
-	TObjectPtr<UBodyControl> LeftFootControl;
-	
-	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Instanced, Category = CharacterControl)
-	TObjectPtr<UBodyControl> RightFootControl;
-	
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = CharacterControl)
 	bool IsSitting;
 	
-public:
-	UFUNCTION(BlueprintCallable, Category = CharacterControl)
-	void MoveLeftHandTowards(FTransform TargetPosition, FBodyControlTargetReachedCallback OnTargetReached);
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = CharacterControl)
+	FRotator HeadRotationTarget;
 	
-	UFUNCTION(BlueprintCallable, Category = CharacterControl)
-	void MoveRightHandTowards(FTransform TargetPosition, FBodyControlTargetReachedCallback OnTargetReached);
-
+public:
 	UFUNCTION(BlueprintCallable, Category = CharacterControl)
 	void Sit();
 	
 	UFUNCTION(BlueprintCallable, Category = CharacterControl)
 	void Stand();
-	
-	UFUNCTION(BlueprintCallable, Category = CharacterControl)
-	void TurnHead(FRotator Rotator);
-	
-	UFUNCTION(BlueprintCallable, Category = CharacterControl)
-	void WatchRightHand();
 	
 	virtual void BeginPlay() override;
 	
