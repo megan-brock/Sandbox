@@ -29,6 +29,12 @@ public:
 	void MoveToRest(FBodyControlTargetReachedCallback OnTargetReached, FBodyControlTargetCancelledCallback OnTargetCancelled);
 	
 	UFUNCTION(BlueprintCallable, BlueprintPure, Category = BodyControl)
+	bool GetIsUserControlled();
+	
+	UFUNCTION(BlueprintCallable, Category = BodyControl)
+	void SetIsUserControlled(bool IsControlled);
+	
+	UFUNCTION(BlueprintCallable, BlueprintPure, Category = BodyControl)
 	bool GetIsControlled();
 	
 	UFUNCTION(BlueprintCallable, Category = BodyControl)
@@ -66,4 +72,6 @@ private:
 	bool bHasReachedTarget = false;
 	
 	void CheckTargetReached();
+	
+	void CancelCurrentMovement();
 };

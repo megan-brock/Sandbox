@@ -23,8 +23,8 @@ public:
 	void Drop(UInteractableItemComponent* Item, bool UseLeftHand, FInteractableDroppedCallback ItemDroppedCallback);
 	
 	UPROPERTY(BlueprintReadOnly)
-	TArray<UInteractableItemComponent*> HeldItems;
-	
+	TArray<TObjectPtr<UInteractableItemComponent>> HeldItems;
+
 private:
 	UPROPERTY()
 	TObjectPtr<UCharacterControlComponent> ControlComponent;

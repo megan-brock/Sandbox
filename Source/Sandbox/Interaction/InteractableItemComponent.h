@@ -11,7 +11,7 @@ class UInteractableItemComponent;
 DECLARE_DYNAMIC_DELEGATE_TwoParams(FInteractablePickedUpCallback, UInteractableItemComponent*, Interactable, UBodyControl*, BodyControl);
 DECLARE_DYNAMIC_DELEGATE_TwoParams(FInteractableDroppedCallback, UInteractableItemComponent*, Interactable, UBodyControl*, BodyControl);
 
-UCLASS( ClassGroup=(Custom), meta=(BlueprintSpawnableComponent) )
+UCLASS(BlueprintType, ClassGroup=(Custom), meta=(BlueprintSpawnableComponent))
 class UInteractableItemComponent : public UActorComponent
 {
 public:

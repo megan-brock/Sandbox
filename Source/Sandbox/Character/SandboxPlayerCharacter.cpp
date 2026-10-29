@@ -13,7 +13,6 @@ void ASandboxPlayerCharacter::NotifyControllerChanged()
 
 void ASandboxPlayerCharacter::SetupPlayerInputComponent(UInputComponent* PlayerInputComponent)
 {	
-	// Set up action bindings
 	if (UEnhancedInputComponent* EnhancedInputComponent = Cast<UEnhancedInputComponent>(PlayerInputComponent))
 	{
 		EnhancedInputComponent->BindAction(MoveAction, ETriggerEvent::Triggered, this, &ASandboxPlayerCharacter::Move);
@@ -33,17 +32,12 @@ void ASandboxPlayerCharacter::BeginPlay()
 
 void ASandboxPlayerCharacter::Move(const FInputActionValue& Value)
 {
-	// input is a Vector2D
 	FVector2D MovementVector = Value.Get<FVector2D>();
 
-	UE_LOG(LogTemplateCharacter, Warning, TEXT("MovementVector: %s"), *MovementVector.ToString());
-	
 	if (Controller && CharacterControlComponent)
 	{
-		// add movement 
 		AddMovementInput(GetActorForwardVector(), MovementVector.Y);
 		AddMovementInput(GetActorRightVector(), MovementVector.X);
-		
 		AddControllerYawInput(CharacterControlComponent->HeadRotationTarget.Yaw / 90.0f);
 	}
 }

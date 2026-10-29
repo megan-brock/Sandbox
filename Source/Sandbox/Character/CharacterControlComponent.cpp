@@ -42,6 +42,9 @@ void UCharacterControlComponent::Stand()
 {
 	IsSitting = false;
 	
+	LeftHandControl->Data.IsUserControlled = false;
+	RightHandControl->Data.IsUserControlled = false;
+	
 	LeftHandControl->Data.IsControlled = false;
 	RightHandControl->Data.IsControlled = false;
 	

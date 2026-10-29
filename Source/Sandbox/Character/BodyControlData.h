@@ -35,5 +35,11 @@ public:
 	bool IsControlled = false;
 	
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = BodyControl)
+	bool IsUserControlled = false;
+	
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = BodyControl)
+	bool IsMoving = false;
+	
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = BodyControl)
 	bool ShouldWatch = false;
 };
