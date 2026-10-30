@@ -38,6 +38,11 @@ void UInteractionComponent::Pickup(UInteractableItemComponent* Item, UBodyContro
 		HandControl = ControlComponent->RightHandControl;
 	}
 	
+	if (HandControl == ControlComponent->LeftHandControl)
+	{
+		ReturnRotation += FRotator(0.0f, -180.0f, 180.0f);
+	}
+	
 	HandControl->MoveTowards(ReturnLocation, ReturnRotation, ItemReachedCallback, FBodyControlTargetCancelledCallback());
 	
 	HeldItems.Add(Item);
@@ -59,6 +64,11 @@ void UInteractionComponent::Drop(UInteractableItemComponent* Item, UBodyControl*
 		HandControl = ControlComponent->RightHandControl;
 	}
 
+	if (HandControl == ControlComponent->LeftHandControl)
+	{
+		ReturnRotation += FRotator(0.0f, -180.0f, 180.0f);
+	}
+	
 	HandControl->MoveTowards(ReturnLocation, ReturnRotation, ItemReturnReachedCallback, FBodyControlTargetCancelledCallback());
 	
 	HeldItems.Remove(Item);

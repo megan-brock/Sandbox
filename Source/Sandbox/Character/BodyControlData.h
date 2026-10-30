@@ -19,10 +19,10 @@ public:
 	UPROPERTY()
 	FRotator TargetRotation = FRotator::ZeroRotator;
 	
-	UPROPERTY()
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = BodyControl)
 	FVector RestLocation = FVector::ZeroVector;
 	
-	UPROPERTY()
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = BodyControl)
 	FRotator RestRotation = FRotator::ZeroRotator;
 	
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = BodyControl)
