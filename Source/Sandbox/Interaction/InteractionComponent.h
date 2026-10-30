@@ -9,7 +9,7 @@ class FInteractablePickedUpCallback;
 class UInteractableItemComponent;
 class UCharacterControlComponent;
 
-UCLASS( ClassGroup=(Custom), meta=(BlueprintSpawnableComponent) )
+UCLASS(Blueprintable, ClassGroup=(Custom), meta=(BlueprintSpawnableComponent))
 class UInteractionComponent : public UActorComponent
 {
 	GENERATED_BODY()
@@ -25,7 +25,7 @@ public:
 	UPROPERTY(BlueprintReadOnly)
 	TArray<TObjectPtr<UInteractableItemComponent>> HeldItems;
 
-private:
-	UPROPERTY()
+protected:
+	UPROPERTY(Blueprintable, BlueprintReadOnly, EditAnywhere, Category = Interaction)
 	TObjectPtr<UCharacterControlComponent> ControlComponent;
 };
