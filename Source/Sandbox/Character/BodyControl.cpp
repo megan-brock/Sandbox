@@ -62,6 +62,16 @@ void UBodyControl::SetIsControlled(bool IsControlled)
 	Data.IsControlled = IsControlled;
 }
 
+bool UBodyControl::GetIsAnimating()
+{
+	return Data.IsAnimating;
+}
+
+void UBodyControl::SetIsAnimating(bool IsAnimating)
+{
+	Data.IsAnimating = IsAnimating;
+}
+
 void UBodyControl::SetShouldWatch(bool ShouldWatch)
 {
 	Data.ShouldWatch = ShouldWatch;
