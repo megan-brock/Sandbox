@@ -69,6 +69,7 @@ void UInteractionComponent::Drop(UInteractableItemComponent* Item, UBodyControl*
 		ReturnRotation += FRotator(0.0f, -180.0f, 180.0f);
 	}
 	
+	
 	HandControl->MoveTowards(ReturnLocation, ReturnRotation, ItemReturnReachedCallback, FBodyControlTargetCancelledCallback());
 	
 	HeldItems.Remove(Item);
