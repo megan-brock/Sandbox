@@ -41,5 +41,8 @@ public:
 	bool IsMoving = false;
 	
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = BodyControl)
+	bool IsAnimating = false;
+	
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = BodyControl)
 	bool ShouldWatch = false;
 };

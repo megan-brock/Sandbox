@@ -18,7 +18,7 @@ void UInteractionComponent::BeginPlay()
 	}
 }
 
-void UInteractionComponent::Pickup(UInteractableItemComponent* Item, bool UseLeftHand, FInteractablePickedUpCallback InteractablePickedUpCallback)
+void UInteractionComponent::Pickup(UInteractableItemComponent* Item, UBodyControl* HandControl, FInteractablePickedUpCallback InteractablePickedUpCallback)
 {
 	ACharacter* InteractingCharacter = Cast<ACharacter>(GetOwner());
 	Item->PickedUpCallback = InteractablePickedUpCallback;
@@ -33,13 +33,17 @@ void UInteractionComponent::Pickup(UInteractableItemComponent* Item, bool UseLef
 	
 	ReturnLocation += FVector(0.0f, 0.0f, 5.0f);
 	
-	UBodyControl* HandControl = UseLeftHand ? ControlComponent->LeftHandControl : ControlComponent->RightHandControl;
+	if (!IsValid(HandControl))
+	{
+		HandControl = ControlComponent->RightHandControl;
+	}
+	
 	HandControl->MoveTowards(ReturnLocation, ReturnRotation, ItemReachedCallback, FBodyControlTargetCancelledCallback());
 	
 	HeldItems.Add(Item);
 }
 
-void UInteractionComponent::Drop(UInteractableItemComponent* Item, bool UseLeftHand, FInteractableDroppedCallback ItemDroppedCallback)
+void UInteractionComponent::Drop(UInteractableItemComponent* Item, UBodyControl* HandControl, FInteractableDroppedCallback ItemDroppedCallback)
 {
 	Item->DroppedCallback = ItemDroppedCallback;
 
@@ -50,7 +54,11 @@ void UInteractionComponent::Drop(UInteractableItemComponent* Item, bool UseLeftH
 	FRotator ReturnRotation;
 	Item->GetReturnLocationAndRotation(ReturnLocation, ReturnRotation);
 	
-	UBodyControl* HandControl = UseLeftHand ? ControlComponent->LeftHandControl : ControlComponent->RightHandControl;
+	if (!IsValid(HandControl))
+	{
+		HandControl = ControlComponent->RightHandControl;
+	}
+
 	HandControl->MoveTowards(ReturnLocation, ReturnRotation, ItemReturnReachedCallback, FBodyControlTargetCancelledCallback());
 	
 	HeldItems.Remove(Item);

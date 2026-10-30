@@ -17,10 +17,10 @@ public:
 	virtual void BeginPlay() override;
 	
 	UFUNCTION(BlueprintCallable)
-	void Pickup(UInteractableItemComponent* Item, bool UseLeftHand, FInteractablePickedUpCallback ItemPickedUpCallback);
+	void Pickup(UInteractableItemComponent* Item, UBodyControl* HandControl, FInteractablePickedUpCallback ItemPickedUpCallback);
 
 	UFUNCTION(BlueprintCallable)
-	void Drop(UInteractableItemComponent* Item, bool UseLeftHand, FInteractableDroppedCallback ItemDroppedCallback);
+	void Drop(UInteractableItemComponent* Item, UBodyControl* HandControl, FInteractableDroppedCallback ItemDroppedCallback);
 	
 	UPROPERTY(BlueprintReadOnly)
 	TArray<TObjectPtr<UInteractableItemComponent>> HeldItems;
