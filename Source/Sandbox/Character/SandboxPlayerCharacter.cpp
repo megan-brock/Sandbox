@@ -57,9 +57,9 @@ void ASandboxPlayerCharacter::Look(const FInputActionValue& Value)
 	FVector2D Value2D = Value.Get<FVector2D>();
 	
 	FRotator HeadRotation = CharacterControlComponent->HeadRotationTarget;
-	HeadRotation.Roll = FMath::Clamp(HeadRotation.Roll + Value2D.Y, -90.0f, 90.0f);
+	HeadRotation.Roll = FMath::Clamp(HeadRotation.Roll + Value2D.Y, -90.0f, 70.0f);
 	HeadRotation.Pitch = 0.0f;
-	HeadRotation.Yaw = FMath::Clamp(HeadRotation.Yaw + Value2D.X, -90.0f, 70.0f);
+	HeadRotation.Yaw = FMath::Clamp(HeadRotation.Yaw + Value2D.X, -90.0f, 90.0f);
 	
 	CharacterControlComponent->HeadRotationTarget = HeadRotation;
 }
