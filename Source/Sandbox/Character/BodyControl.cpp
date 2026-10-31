@@ -2,7 +2,7 @@
 
 void UBodyControl::Tick(float DeltaTime)
 {
-	if (Data.IsControlled)
+	if (bHasTarget)
 	{
 		Data.CurrentLocation = FMath::Lerp(Data.CurrentLocation, Data.TargetLocation, DeltaTime * 3.0f);
 		Data.CurrentRotation = FMath::Lerp(Data.CurrentRotation, Data.TargetRotation, DeltaTime * 3.0f);
@@ -28,11 +28,12 @@ void UBodyControl::MoveTowards(
 	
 	Data.IsControlled = true;
 	
-	Data.IsMoving = true;
+	Data.IsReaching = true;
 	
 	TargetReachedCallback = OnTargetReached;
 	TargetCancelledCallback = OnTargetCancelled;
 	
+	bHasTarget = true;
 	bHasReachedTarget = false;
 }
 
@@ -62,11 +63,6 @@ void UBodyControl::SetIsControlled(bool IsControlled)
 	Data.IsControlled = IsControlled;
 }
 
-bool UBodyControl::GetIsAnimating()
-{
-	return Data.IsAnimating;
-}
-
 void UBodyControl::SetIsAnimating(bool IsAnimating)
 {
 	Data.IsAnimating = IsAnimating;
@@ -75,6 +71,11 @@ void UBodyControl::SetIsAnimating(bool IsAnimating)
 void UBodyControl::SetShouldWatch(bool ShouldWatch)
 {
 	Data.ShouldWatch = ShouldWatch;
+}
+
+void UBodyControl::SetIsReaching(bool IsReaching)
+{
+	Data.IsReaching = IsReaching;
 }
 
 void UBodyControl::SnapTo(FVector NewLocation, FRotator NewRotation)
@@ -116,8 +117,9 @@ void UBodyControl::CheckTargetReached()
 		return;
 	}
 
-	Data.IsMoving = false;
+	Data.IsReaching = false;
 	bHasReachedTarget = true;
+	bHasTarget = false;
 	
 	const FBodyControlTargetReachedCallback CallbackToExecute = TargetReachedCallback;
 
@@ -129,18 +131,24 @@ void UBodyControl::CheckTargetReached()
 
 void UBodyControl::CancelCurrentMovement()
 {
+	if (!bHasTarget)
+	{
+		return;
+	}
+	
 	const FBodyControlTargetCancelledCallback CallbackToExecute = TargetCancelledCallback;
 	
 	TargetReachedCallback.Unbind();
 	TargetCancelledCallback.Unbind();
 	
-	if (TargetReachedCallback.IsBound())
+	if (CallbackToExecute.IsBound())
 	{
 		UE_LOG(LogTemp, Warning, TEXT("CancelCurrentMovement() Cancelling bound movement"));
 
 		CallbackToExecute.ExecuteIfBound(this);
 	}
 
+	bHasTarget = false;
 	bHasReachedTarget = false;
-	Data.IsMoving = false;
+	Data.IsReaching = false;
 }

@@ -25,7 +25,7 @@ public:
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = CharacterControl)
 	bool IsSitting;
 	
-	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = CharacterControl)
+	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category = CharacterControl)
 	FRotator HeadRotationTarget;
 	
 public:

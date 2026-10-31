@@ -38,7 +38,7 @@ public:
 	bool IsUserControlled = false;
 	
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = BodyControl)
-	bool IsMoving = false;
+	bool IsReaching = false;
 	
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = BodyControl)
 	bool IsAnimating = false;

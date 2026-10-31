@@ -40,14 +40,14 @@ public:
 	UFUNCTION(BlueprintCallable, Category = BodyControl)
 	void SetIsControlled(bool IsControlled);
 	
-	UFUNCTION(BlueprintCallable, BlueprintPure, Category = BodyControl)
-	bool GetIsAnimating();
-	
 	UFUNCTION(BlueprintCallable, Category = BodyControl)
 	void SetIsAnimating(bool IsAnimating);
 	
 	UFUNCTION(BlueprintCallable, Category = BodyControl)
 	void SetShouldWatch(bool ShouldWatch);
+	
+	UFUNCTION(BlueprintCallable, Category = BodyControl)
+	void SetIsReaching(bool IsReaching);
 	
 	UFUNCTION(BlueprintCallable, Category = BodyControl)
 	void SnapTo(FVector NewLocation, FRotator NewRotation);
@@ -76,6 +76,7 @@ private:
 	FBodyControlTargetCancelledCallback TargetCancelledCallback;
 	
 	bool bHasReachedTarget = false;
+	bool bHasTarget = false;
 	
 	void CheckTargetReached();
 	
