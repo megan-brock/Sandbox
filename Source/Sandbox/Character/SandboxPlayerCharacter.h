@@ -48,7 +48,4 @@ public:
 	void Move(const FInputActionValue& Value);
 	void Turn(const FInputActionValue& Value);
 	void Look(const FInputActionValue& Value);
-
-	UFUNCTION(BlueprintCallable, Category = SandboxCharacter)
-	void MoveHand(const FVector2D& Value, const FVector& Offset);
 };

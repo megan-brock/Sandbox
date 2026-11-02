@@ -1,12 +1,8 @@
 ﻿#include "BodyControl.h"
 
-UBodyControl::UBodyControl()
-{
-}
-
 void UBodyControl::Tick(float DeltaTime)
 {
-	if (Data.IsControlled)
+	if (bHasTarget)
 	{
 		Data.CurrentLocation = FMath::Lerp(Data.CurrentLocation, Data.TargetLocation, DeltaTime * 3.0f);
 		Data.CurrentRotation = FMath::Lerp(Data.CurrentRotation, Data.TargetRotation, DeltaTime * 3.0f);
@@ -16,20 +12,50 @@ void UBodyControl::Tick(float DeltaTime)
 }
 
 void UBodyControl::MoveTowards(
-	FVector NewCurrentLocation, FRotator NewCurrentRotation, 
 	FVector NewTargetLocation, FRotator NewTargetRotation,
-	FBodyControlTargetReachedCallback OnTargetReached)
+	FBodyControlTargetReachedCallback OnTargetReached,
+	FBodyControlTargetCancelledCallback OnTargetCancelled)
 {
-	Data.CurrentLocation = NewCurrentLocation;
-	Data.CurrentRotation = NewCurrentRotation;
+	CancelCurrentMovement();
+	
+	FTransform CurrentTransform = Mesh->GetBoneTransform(Data.BoneName);
+	
+	Data.CurrentLocation = CurrentTransform.GetLocation();
+	Data.CurrentRotation = CurrentTransform.Rotator();
 	
 	Data.TargetLocation = NewTargetLocation;
 	Data.TargetRotation = NewTargetRotation;
 	
 	Data.IsControlled = true;
 	
+	Data.IsReaching = true;
+	
 	TargetReachedCallback = OnTargetReached;
+	TargetCancelledCallback = OnTargetCancelled;
+	
+	bHasTarget = true;
 	bHasReachedTarget = false;
+}
+
+void UBodyControl::MoveToRest(FBodyControlTargetReachedCallback OnTargetReached,
+	FBodyControlTargetCancelledCallback OnTargetCancelled)
+{
+	MoveTowards(Data.RestLocation, Data.RestRotation, OnTargetReached, OnTargetCancelled);
+}
+
+bool UBodyControl::GetIsUserControlled()
+{
+	return Data.IsUserControlled;
+}
+
+void UBodyControl::SetIsUserControlled(bool IsControlled)
+{
+	Data.IsUserControlled = IsControlled;
+}
+
+bool UBodyControl::GetIsControlled()
+{
+	return Data.IsControlled;
 }
 
 void UBodyControl::SetIsControlled(bool IsControlled)
@@ -37,17 +63,27 @@ void UBodyControl::SetIsControlled(bool IsControlled)
 	Data.IsControlled = IsControlled;
 }
 
-void UBodyControl::SnapTo(FVector NewLocation, FRotator NewRotation)
+void UBodyControl::SetIsAnimating(bool IsAnimating)
 {
-	Data.CurrentLocation = Data.TargetLocation = NewLocation;
-	Data.CurrentRotation = Data.TargetRotation = NewRotation;
-	Data.IsControlled = true;
+	Data.IsAnimating = IsAnimating;
 }
 
-void UBodyControl::RotateTowards(FRotator NewTargetRotation)
+void UBodyControl::SetShouldWatch(bool ShouldWatch)
 {
-	Data.CurrentRotation = Data.TargetRotation = NewTargetRotation;
-	Data.IsControlled = true;
+	Data.ShouldWatch = ShouldWatch;
+}
+
+void UBodyControl::SetIsReaching(bool IsReaching)
+{
+	Data.IsReaching = IsReaching;
+}
+
+void UBodyControl::SnapTo(FVector NewLocation, FRotator NewRotation)
+{
+	CancelCurrentMovement();
+	
+	Data.CurrentLocation = Data.TargetLocation = NewLocation;
+	Data.CurrentRotation = Data.TargetRotation = NewRotation;
 }
 
 bool UBodyControl::HasReachedTarget() const
@@ -55,14 +91,23 @@ bool UBodyControl::HasReachedTarget() const
 	const bool bLocationReached = FVector::DistSquared(Data.CurrentLocation, Data.TargetLocation)
 		<= FMath::Square(LocationReachedTolerance);
 
-	const bool bRotationReached = Data.CurrentRotation.Equals(Data.TargetRotation, RotationReachedTolerance);
+	return bLocationReached;
+}
 
-	return bLocationReached && bRotationReached;
+void UBodyControl::SetRestLocationAndRotation(FVector Location, FRotator Rotation, bool SnapToTarget)
+{
+	Data.RestLocation = Location;
+	Data.RestRotation = Rotation;
+	
+	if (SnapToTarget)
+	{
+		SnapTo(Location, Rotation);
+	}
 }
 
 void UBodyControl::CheckTargetReached()
 {
-	if (!Data.IsControlled || bHasReachedTarget)
+	if (bHasReachedTarget)
 	{
 		return;
 	}
@@ -72,11 +117,38 @@ void UBodyControl::CheckTargetReached()
 		return;
 	}
 
+	Data.IsReaching = false;
 	bHasReachedTarget = true;
+	bHasTarget = false;
+	
+	const FBodyControlTargetReachedCallback CallbackToExecute = TargetReachedCallback;
 
-	if (TargetReachedCallback.IsBound())
+	TargetReachedCallback.Unbind();
+	TargetCancelledCallback.Unbind();
+
+	CallbackToExecute.ExecuteIfBound(this);
+}
+
+void UBodyControl::CancelCurrentMovement()
+{
+	if (!bHasTarget)
 	{
-		TargetReachedCallback.Execute(this);
-		UE_LOG(LogTemp, Warning, TEXT("Target reached"));
+		return;
 	}
+	
+	const FBodyControlTargetCancelledCallback CallbackToExecute = TargetCancelledCallback;
+	
+	TargetReachedCallback.Unbind();
+	TargetCancelledCallback.Unbind();
+	
+	if (CallbackToExecute.IsBound())
+	{
+		UE_LOG(LogTemp, Warning, TEXT("CancelCurrentMovement() Cancelling bound movement"));
+
+		CallbackToExecute.ExecuteIfBound(this);
+	}
+
+	bHasTarget = false;
+	bHasReachedTarget = false;
+	Data.IsReaching = false;
 }

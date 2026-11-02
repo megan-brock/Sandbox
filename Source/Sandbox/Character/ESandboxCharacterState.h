@@ -7,4 +7,5 @@ enum ESandboxCharacterState : uint8
 	Default,
 	Meal,
 	HandControl,
+	Inspect,
 };
