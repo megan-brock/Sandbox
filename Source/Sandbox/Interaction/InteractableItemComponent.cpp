@@ -21,6 +21,12 @@ void UInteractableItemComponent::BeginPlay()
 
 void UInteractableItemComponent::Pickup(bool UseLeftHand)
 {
+	if (!AttachToActorOnPickup)
+	{
+		// TODO subobject attachment for spoon/fork foods
+		return;
+	}
+	
 	AActor* Owner = GetOwner();
 	if (!Owner || !InteractingCharacter || !InteractingCharacter->GetMesh())
 	{
@@ -48,7 +54,7 @@ void UInteractableItemComponent::Drop()
 		UE_LOG(LogTemp, Warning, TEXT("Drop failed: missing owner."));
 		return;
 	}
-
+	
 	Owner->DetachFromActor(FDetachmentTransformRules::KeepWorldTransform);
 	Owner->SetActorTransform(OriginalTransform, false, nullptr, ETeleportType::TeleportPhysics);
 }
