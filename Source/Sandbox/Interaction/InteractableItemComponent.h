@@ -40,6 +40,9 @@ public:
 	
 public:
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category="Interaction")
+	bool AttachToActorOnPickup = true;
+	
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category="Interaction")
 	TObjectPtr<USceneComponent> ReturnTransformComponent;
 	
 	UPROPERTY()
