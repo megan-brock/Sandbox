@@ -56,6 +56,8 @@ void UDialogueInstance::StartDialogue()
 	}
 	
 	CurrentNode = DialogueAsset->Graph->Nodes[0];
+	
+	NotifyParticipantsDialogueStarted();
 	NotifyParticipantsDialogueAdvanced();
 }
 
