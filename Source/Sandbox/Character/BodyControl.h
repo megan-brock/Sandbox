@@ -63,7 +63,7 @@ public:
 	FBodyControlData Data;
 	
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = BodyControl)
-	float LocationReachedTolerance = 1.0f;
+	float LocationReachedTolerance = 0.1f;
 
 	UPROPERTY()
 	TObjectPtr<USkeletalMeshComponent> Mesh;
