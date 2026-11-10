@@ -2,15 +2,13 @@
 
 #pragma once
 
-#include <functional>
 #include "CoreMinimal.h"
 #include "Components/ActorComponent.h"
-#include "DialogueAsset.h"
 #include "BaseDialogueParticipantComponent.generated.h"
 
-DECLARE_DYNAMIC_MULTICAST_DELEGATE_OneParam(FOnConversationStarted, UBaseDialogueParticipantComponent*, OtherParticipant);
-DECLARE_DYNAMIC_MULTICAST_DELEGATE_TwoParams(FOnDialogueFinished, EDialogueNodeAction, Action, const FString&, Data);
-DECLARE_DYNAMIC_MULTICAST_DELEGATE(FOnDialoguePrompted);
+class USpeakerAsset;
+class UDialogueAsset;
+class UDialogueInstance;
 
 UCLASS(Blueprintable, Abstract, ClassGroup=(Custom), meta=(BlueprintSpawnableComponent) )
 class SANDBOX_API UBaseDialogueParticipantComponent : public UActorComponent
@@ -18,48 +16,31 @@ class SANDBOX_API UBaseDialogueParticipantComponent : public UActorComponent
 	GENERATED_BODY()
 
 public:
-	UBaseDialogueParticipantComponent();
-	
 	UFUNCTION(BlueprintCallable, Category = "Dialogue")
-	bool HasConversationTopic(FString TopicName) const;
+	bool CanStartDialogue(FString TopicName) const;
 
 	UFUNCTION(BlueprintCallable, Category = "Dialogue")
-	UDialogueAsset* GetConversationTopic(FString TopicName) const;
-	
-	UFUNCTION(BlueprintCallable, Category = "Dialogue")
-	void AddConversationTopic(FString TopicName);
-	
-	UFUNCTION(BlueprintCallable, Category = "Dialogue")
-	void RemoveConversationTopic(FString TopicName);
+	TArray<UDialogueAsset*> GetAvailableDialogueTopics() const;
 
-	UFUNCTION(BlueprintCallable, Category = "Dialogue")
-	TArray<FText> GetDialoguePrompts();
+	UFUNCTION(BlueprintImplementableEvent, Category = "Dialogue")
+	void NotifyDialogueStarted(UDialogueInstance* DialogueInstance);
 	
-	UFUNCTION(BlueprintCallable, Category = "Dialogue")
-	void EnterConversation();
+	UFUNCTION(BlueprintImplementableEvent, Category = "Dialogue")
+	void NotifyDialogueAdvanced(UDialogueInstance* DialogueInstance, const FText& DialogueText);
 
-	UFUNCTION(BlueprintCallable, Category = "Dialogue")
-	void StartDialogue(FString TopicName);
-
-	UFUNCTION(BlueprintCallable, Category = "Dialogue")
-	void AdvanceDialogue(FString TopicName, int DialogueOptionIndex);
+	UFUNCTION(BlueprintImplementableEvent, Category = "Dialogue")
+	void NotifyDialogueFinished(UDialogueInstance* DialogueInstance);
 	
-protected:
+	UFUNCTION(BlueprintImplementableEvent, Category = "Dialogue")
+	void PromptForDialogueResponse(UDialogueInstance* DialogueInstance, const TArray<FText>& ResponseOptions);
+
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category=Component, meta=(AllowPrivateAccess = "true"))
-	FName ParticipantId;
+	TObjectPtr<USpeakerAsset> SpeakerAsset;
 
+protected:
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Dialogue")
-	TArray<UDialogueAsset*> DialogueAssets;
+	TArray<TObjectPtr<UDialogueAsset>> DialogueAssets;
 	
-	UPROPERTY(BlueprintAssignable, Category = "Events")
-	FOnConversationStarted OnConversationStarted;
-	
-	UPROPERTY()
-	class UDialogueRuntimeNode* CurrentNode;
-	
-	UPROPERTY( BlueprintAssignable, Category = "Events")
-	FOnDialogueFinished OnDialogueFinished;
-	
-	UPROPERTY( BlueprintAssignable, Category = "Events")
-	FOnDialoguePrompted OnDialoguePrompted;
+	UPROPERTY(BlueprintReadOnly, Category = "Dialogue")
+	TSet<FGuid> ActiveDialogueIds;
 };
