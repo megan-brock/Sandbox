@@ -1,5 +1,4 @@
 #include "CharacterControlComponent.h"
-
 #include "SandboxBaseCharacter.h"
 
 UCharacterControlComponent::UCharacterControlComponent()
