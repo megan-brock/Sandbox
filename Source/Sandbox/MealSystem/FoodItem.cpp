@@ -1,5 +1,6 @@
 ﻿#include "FoodItem.h"
-#include "MealParticipantComponent.h"
+#include "CustomerMealComponent.h"
+#include "MealParticipant.h"
 
 AFoodItem::AFoodItem()
 {
@@ -44,10 +45,10 @@ bool AFoodItem::RemovePortion()
 	return true;
 }
 
-void AFoodItem::TakeBite(UMealParticipantComponent* MealParticipant)
+void AFoodItem::TakeBite(UCustomerMealComponent* Customer)
 {
 	RemovePortion();
-	OnBite.Broadcast(MealParticipant);
+	OnBite.Broadcast(Customer);
 }
 
 

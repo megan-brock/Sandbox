@@ -6,10 +6,10 @@
 #include "Sandbox/Interaction/InteractableItemComponent.h"
 #include "FoodItem.generated.h"
 
-class UMealParticipantComponent;
+class UCustomerMealComponent;
 
 DECLARE_DYNAMIC_MULTICAST_DELEGATE(FOnFinished);
-DECLARE_DYNAMIC_MULTICAST_DELEGATE_OneParam(FOnBite, UMealParticipantComponent*, MealParticipant);
+DECLARE_DYNAMIC_MULTICAST_DELEGATE_OneParam(FOnBite, UCustomerMealComponent*, Customer);
 
 UCLASS(Blueprintable)
 class AFoodItem : public AActor
@@ -36,7 +36,7 @@ public:
 	bool RemovePortion();
 	
 	UFUNCTION(BlueprintCallable, Category = FoodItem)
-	virtual void TakeBite(UMealParticipantComponent* MealParticipant);
+	virtual void TakeBite(UCustomerMealComponent* Customer);
 
 	UFUNCTION(BlueprintCallable, Category = FoodItem)
 	bool TryCollect();

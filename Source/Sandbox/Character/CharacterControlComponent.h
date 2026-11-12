@@ -42,4 +42,6 @@ public:
 private:
 	UPROPERTY()
 	TObjectPtr<USkeletalMeshComponent> Mesh;
+	
+	bool ControlEnabled = true;
 };
