@@ -51,7 +51,6 @@ void AFoodItem::TakeBite(UCustomerMealComponent* Customer)
 	OnBite.Broadcast(Customer);
 }
 
-
 void AFoodItem::PlaceOnTable(FTransform TargetTransform)
 {
 	InteractableItemComponent->OriginalTransform = TargetTransform;
