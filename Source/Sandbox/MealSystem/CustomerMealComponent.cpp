@@ -3,4 +3,5 @@
 void UCustomerMealComponent::SetCurrentServer(UServerMealComponent* NewServer)
 {
 	CurrentServer = NewServer;
+	OnActiveServerChanged.Broadcast(CurrentServer);
 }
