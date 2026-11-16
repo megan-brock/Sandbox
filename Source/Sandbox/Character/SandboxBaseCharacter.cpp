@@ -39,6 +39,7 @@ void ASandboxBaseCharacter::EndPlay(const EEndPlayReason::Type EndPlayReason)
 			SandboxGameplayTags::State_BlockInput, 
 			EGameplayTagEventType::NewOrRemoved
 			).Remove(BlockInputTagHandle);
+			
 		BlockInputTagHandle.Reset();	
 	}
 }
@@ -50,7 +51,7 @@ UAbilitySystemComponent* ASandboxBaseCharacter::GetAbilitySystemComponent() cons
 
 void ASandboxBaseCharacter::OnBlockInputTagChanged(const FGameplayTag CallbackTag, int32 NewCount)
 {
-	const bool bShouldBlockInput = (NewCount > 0);
+	const bool bShouldBlockInput = NewCount > 0;
 
 	Controller->SetIgnoreMoveInput(bShouldBlockInput);
 	Controller->SetIgnoreLookInput(bShouldBlockInput);	
