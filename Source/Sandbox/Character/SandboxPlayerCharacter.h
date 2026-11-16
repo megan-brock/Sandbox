@@ -37,7 +37,7 @@ public:
 	
 public:
 	// AActor interface
-	void BeginPlay() override;
+	virtual void BeginPlay() override;
 	// End of AActor interface
 	
 	// APawn interface

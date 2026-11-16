@@ -15,7 +15,10 @@ public class Sandbox : ModuleRules
 			"Engine", 
 			"InputCore", 
 			"EnhancedInput", 
-			"DialogueAssetEditorRuntime"
+			"DialogueAssetEditorRuntime",
+			"GameplayAbilities",
+			"GameplayTags",
+			"GameplayTasks"
 		});
 
 		if (Target.bBuildEditor)
