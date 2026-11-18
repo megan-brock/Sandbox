@@ -44,3 +44,7 @@ This project is built with:
 ## Project Status
 
 This prototype is a work in progress. Systems may change frequently as mechanics are developed and tested, and builds may be unstable.
+
+## Usage
+
+This repository is made public for portfolio use. External contributions and pull requests are not accepted.
