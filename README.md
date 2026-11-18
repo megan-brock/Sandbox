@@ -37,6 +37,10 @@ This project is built with:
 - World subsystem for managing active conversations
 - Actor components for player and NPC participation in conversations
 
+<img width="2560" height="1440" alt="DialogueEditor" src="https://github.com/user-attachments/assets/450168e4-ff3f-45de-a7e0-5f6fe95ce141" />
+
+<img width="2567" height="1447" alt="ScreenShot00000" src="https://github.com/user-attachments/assets/94595ada-017f-49b9-a815-78e9777a46d9" />
+
 ## Project Status
 
 This prototype is a work in progress. Systems may change frequently as mechanics are developed and tested, and builds may be unstable.
