@@ -27,6 +27,10 @@ This project is built with:
 
 - The player can directly move either hand to interact with food on the table, or to point to items on the menu to order them
 
+<img width="2560" height="1440" alt="Menu" src="https://github.com/user-attachments/assets/a9a6b6d2-f4d7-4e8f-b3c9-f3a3cc505227" />
+
+<img width="2560" height="1440" alt="TableInteraction" src="https://github.com/user-attachments/assets/5bbbfc5c-f189-4f68-bc6d-acb6460f5c43" />
+
 ### Dialogue System
 
 - Custom plugin for creating branching dialogue assets
