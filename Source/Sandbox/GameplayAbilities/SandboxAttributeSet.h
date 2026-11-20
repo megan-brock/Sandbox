@@ -49,7 +49,7 @@ public:
 	UPROPERTY(BlueprintAssignable, Category = "Attributes")
 	FOnAttributeChangedEvent OnMaxStaminaChanged;
 
-	UFUNCTION(BlueprintCallable, Category = "GAS|Attributes")
+	UFUNCTION(BlueprintCallable, Category = "Attributes")
 	void BroadcastInitialValues();
 	
 public:

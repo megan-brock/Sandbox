@@ -7,6 +7,7 @@
 #include "Logging/LogMacros.h"
 #include "SandboxBaseCharacter.generated.h"
 
+class USandboxAbilitySystemComponent;
 struct FGameplayTag;
 class USandboxAttributeSet;
 class UCharacterControlComponent;
@@ -34,7 +35,7 @@ public:
 	TObjectPtr<UCharacterControlComponent> CharacterControlComponent;
 	
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Abilities")
-	TObjectPtr<UAbilitySystemComponent> AbilitySystemComponent;
+	TObjectPtr<USandboxAbilitySystemComponent> AbilitySystemComponent;
 	
 	UPROPERTY(VisibleDefaultsOnly, BlueprintReadOnly, Category = "Abilities")
 	TObjectPtr<USandboxAttributeSet> AttributeSet;

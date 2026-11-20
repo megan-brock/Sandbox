@@ -3,6 +3,7 @@
 #include "AbilitySystemComponent.h"
 #include "CharacterControlComponent.h"
 #include "Sandbox/SandboxGameplayTags.h"
+#include "Sandbox/GameplayAbilities/SandboxAbilitySystemComponent.h"
 #include "Sandbox/GameplayAbilities/SandboxAttributeSet.h"
 
 DEFINE_LOG_CATEGORY(LogTemplateCharacter);
@@ -10,7 +11,7 @@ DEFINE_LOG_CATEGORY(LogTemplateCharacter);
 ASandboxBaseCharacter::ASandboxBaseCharacter()
 {
 	CharacterControlComponent = CreateDefaultSubobject<UCharacterControlComponent>(TEXT("CharacterControlComponent"));
-	AbilitySystemComponent = CreateDefaultSubobject<UAbilitySystemComponent>(TEXT("AbilitySystemComponent"));
+	AbilitySystemComponent = CreateDefaultSubobject<USandboxAbilitySystemComponent>(TEXT("AbilitySystemComponent"));
 	AttributeSet = CreateDefaultSubobject<USandboxAttributeSet>(TEXT("AttributeSet"));
 }
 
